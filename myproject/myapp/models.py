@@ -17,8 +17,7 @@ class Recipe(models.Model):
     coocking_time = models.IntegerField() # в минутах
     image_of_food = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    categories = models.ManyToManyField(Category)
-    ingridients = models.TextField(max_length=2500, blank=True)
+    ingredients = models.TextField(max_length=2500, blank=True)
     date_of_create = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -26,6 +25,8 @@ class Recipe(models.Model):
 
 
 class RecipeCategory(models.Model):
+    # Убрал связь M-to-M в Рецептах, так как в задании указано, что нужно написать модель.
+    # Если оставить, то будут дублироваться данные.
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
