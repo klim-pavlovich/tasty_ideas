@@ -1,0 +1,11 @@
+{% extends "base.html" %} {% block title %}Пять случайныйх рецептов{% endblock title %}
+{% block content %}
+<h1>Пять случайных рецептов</h1>
+<ul>
+	{% for recipe in random_recipes %}
+	<li>{{ recipe.title }}</li>
+	{% empty %}
+	<li>Рецепты не найдены.</li>
+	{% endfor %}
+</ul>
+{% endblock content %}
