@@ -1,0 +1,10 @@
+{% extends "base.html" %} {% block title %}Подробный рецепт{% endblock title %}
+{% block content %}
+{% if recipe %}
+    <h1>Подробный рецепт</h1>
+    <p>{{ recipe.title }}</p>
+    <p>{{ recipe.description }}</p>
+{% else %}
+    <p>Рецепт не найден.</p>
+{% endif %}
+{% endblock content %}
