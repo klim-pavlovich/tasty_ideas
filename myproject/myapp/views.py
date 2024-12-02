@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
-from .models import Recipe
+from .models import Recipe, Category
 from .forms import RegistrationForm, RecipeForm
 
 
@@ -37,7 +37,8 @@ def create_recipe(request: HttpRequest):
 
 
 def index_recipes(request: HttpRequest):
-    return render(request, 'myapp/index_recipes.html')
+    categories = Category.objects.filter(name__in=["Супы", "Завтраки", "Сэндвичи", "Салаты"])
+    return render(request, 'myapp/index_recipes.html', {'categories': categories})
 
 
 def get_five_random_recipes(request: HttpRequest):
