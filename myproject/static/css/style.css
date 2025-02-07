@@ -1,0 +1,151 @@
+.header {
+	padding-top: 10px; /* Уменьшение отступа сверху */
+	padding-bottom: 10px; /* Уменьшение отступа снизу */
+	background: linear-gradient(
+		135deg,
+		rgba(255, 255, 255, 0.8),
+		rgba(240, 240, 240, 0.8)
+	); /* Можно сохранить градиент */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Легкая тень */
+	z-index: 3;
+}
+
+.header .navbar-brand img {
+	max-height: 40px;
+}
+
+.header .nav-link {
+	font-size: 16px;
+}
+
+.header .nav-link i {
+	font-size: 18px;
+}
+
+.navbar-nav .nav-item {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+/* Добавление кастомных цветов */
+:root {
+	--custom-yellow-color: #ffb031;
+	--custom-orrange-color: #fd9900;
+	--custom-pink-color: #fd6e8c;
+	--custom-peach-color: #ec7440;
+	--custom-black-color: #1e1e1e;
+}
+
+.applied-custom-black {
+	color: var(--custom-black-color);
+}
+
+.applied-custom-pink {
+	color: var(--custom-pink-color);
+}
+
+.applied-custom-yellow {
+	color: var(--custom-yellow-color);
+}
+
+.applied-custom-orrange {
+	color: var(--custom-orrange-color);
+}
+
+.applied-custom-peach {
+	color: var(--custom-peach-color);
+}
+
+/* Настройки для базового шаблона */
+header .container-fluid,
+footer .container-fluid {
+	padding-left: 10%;
+	padding-right: 10%;
+}
+
+/* header */
+.nav-link.active {
+	color: var(--custom-yellow-color) !important;
+}
+
+.i,
+.bi {
+	color: black !important;
+}
+
+img.rounded {
+	border-radius: 8px;
+}
+
+img.img-fluid {
+	object-fit: cover; /* Это свойство поможет изображению полностью заполнять контейнер, сохраняя пропорции */
+}
+
+.navbar-custom {
+	display: flex;
+	padding: 8px 200px;
+	align-items: center;
+	gap: 16px;
+	width: 1920px;
+	position: relative; /* Фиксируем навбар в верхней части */
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 1000; /* Гарантирует, что навбар будет поверх */
+	padding: 8px 200px;
+	background-color: rgba(255, 255, 255, 0.7); /* Полупрозрачный фон для навбара */
+	backdrop-filter: blur(10px); /* Немного размазываем фон (необязательно) */
+}
+
+.navlink-custom {
+	color: var(--Grays-Black, var(--Grays-Black, #000));
+	font-family: "Halvar Breitschrift";
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 28px;
+}
+
+/* Footer */
+.product-name {
+	color: var(--custom-yellow-color);
+}
+
+/* Index Page */
+.custom-top-content {
+	position: relative;
+	width: 100%;
+}
+
+.custom-top-content .col-3 {
+	position: relative;
+}
+
+.custom-gradient-overlay {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 70%;
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #fff 60%);
+	z-index: 1;
+}
+
+.slogan {
+	position: absolute;
+	padding-left: 10%;
+	padding-bottom: 10%;
+	z-index: 2;
+}
+
+.slogan h1 {
+	font-size: 80px !important;
+	font-style: normal;
+	font-weight: 550;
+	line-height: 105%;
+}
+
+/* Контект для карточек с категориями */
+.card-custom {
+	background-color: #f6f7f9;
+}
