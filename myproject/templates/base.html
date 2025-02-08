@@ -42,10 +42,21 @@
             </div>
 
             <!-- Правая часть: иконки для поиска, избранного и профиля -->
-            <div class="d-flex align-items-center ">
+            <div class="d-flex align-items-center">
               <a class="nav-link" href="#"><i class="bi bi-search"></i></a> <!-- Иконка поиска -->
               <a class="nav-link" href="#"><i class="bi bi-heart"></i></a> <!-- Иконка сердца -->
-              <a class="nav-link" href="#"><i class="bi bi-person"></i></a> <!-- Иконка профиля -->
+
+              {% if user.is_authenticated %}
+                  <a href="{% url 'logout' %}" class="nav-link">
+                      <i class="bi bi-box-arrow-right"></i>
+                      <span>Выйти</span>
+                  </a>
+              {% else %}
+                  <a href="{% url 'login' %}" class="nav-link">
+                      <i class="bi bi-box-arrow-in-right"></i>
+                      <span>Войти</span>
+                  </a>
+              {% endif %}
             </div>
           </div>
         </div>

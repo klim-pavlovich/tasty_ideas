@@ -1,7 +1,25 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from myapp.models import Recipe
+
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Введите имя пользователя'
+            }
+        )
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Введите пароль'
+            }
+        )
+    )
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -23,7 +41,7 @@ class RecipeForm (forms.ModelForm):
             'ingredients': forms.Textarea(attrs={'cols': 80, 'rows': 6}),
         }
 
-     # Дополнительная валидация для поля cooking_time
+    # Дополнительная валидация для поля cooking_time
     def clean_cooking_time(self):
         cooking_time = self.cleaned_data.get('cooking_time')
         if cooking_time is not None and cooking_time < 1:

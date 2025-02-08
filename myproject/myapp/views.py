@@ -1,7 +1,8 @@
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 from .models import Recipe, Category
-from .forms import RegistrationForm, RecipeForm
+from .forms import RegistrationForm, RecipeForm, LoginForm
+from django.contrib.auth import login, authenticate, logout
 
 
 def create_recipe(request: HttpRequest):
@@ -70,3 +71,32 @@ def register(request):
     else:
         form = RegistrationForm()
     return render(request, 'myapp/registration.html', {'form': form})
+
+
+def login_view(request):
+    """Авторизация пользователя."""
+    if request.user.is_authenticated:
+        return redirect('index_recipes')
+
+    error_message = None
+    if request.method == 'POST':
+        form = LoginForm(data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('index_recipes')
+            else:
+
+                error_message = "Неверно введено имя пользователя или пароль"
+
+    else:
+        form = LoginForm()
+
+    return render(request, 'myapp/authorization.html', {'form': form, 'error_message': error_message})
+
+def logout_view(request):
+    logout(request)
+    return redirect('index_recipes')
