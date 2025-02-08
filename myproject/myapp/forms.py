@@ -47,3 +47,24 @@ class RecipeForm (forms.ModelForm):
         if cooking_time is not None and cooking_time < 1:
             raise forms.ValidationError('Время готовки должно быть больше 0 минут.')
         return cooking_time
+
+
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(
+        label='Имя пользователя',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введите ваше имя'})
+    )
+    password = forms.CharField(
+        label='Пароль',
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Введите пароль'})
+    )
+
+    
+    error_messages = {
+        'invalid_login': '',  # Убираем стандартное сообщение
+        'inactive': 'Этот аккаунт неактивен.'
+    }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.label_suffix = ''

@@ -18,6 +18,8 @@ urlpatterns = [
     path('create_recipe/', create_recipe, name='create_recipe'),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
+    path('login/', login_view, name='login'),
+    path('logout/', logout_view, name='logout'),
 ]
 
 

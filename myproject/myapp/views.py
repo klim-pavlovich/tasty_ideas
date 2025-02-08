@@ -1,8 +1,8 @@
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
-from .models import Recipe, Category
-from .forms import RegistrationForm, RecipeForm, LoginForm
 from django.contrib.auth import login, authenticate, logout
+from .models import Recipe, Category
+from .forms import RegistrationForm, RecipeForm
 
 
 def create_recipe(request: HttpRequest):
@@ -52,7 +52,7 @@ def get_five_random_recipes(request: HttpRequest):
     return render(request, 'myapp/five_random_recipes.html', context)
 
 
-def get_detailed_recipe(request):
+def get_detailed_recipe(request: HttpRequest):
     """Получение детализированного случайного рецепта."""
     random_recipe = Recipe.objects.order_by('?').first()
     context = {
@@ -61,7 +61,7 @@ def get_detailed_recipe(request):
     return render(request, 'myapp/detailed_recipe.html', context)
 
 
-def register(request):
+def register(request: HttpRequest):
     """Регистрация пользователя."""
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
@@ -71,32 +71,3 @@ def register(request):
     else:
         form = RegistrationForm()
     return render(request, 'myapp/registration.html', {'form': form})
-
-
-def login_view(request):
-    """Авторизация пользователя."""
-    if request.user.is_authenticated:
-        return redirect('index_recipes')
-
-    error_message = None
-    if request.method == 'POST':
-        form = LoginForm(data=request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('index_recipes')
-            else:
-
-                error_message = "Неверно введено имя пользователя или пароль"
-
-    else:
-        form = LoginForm()
-
-    return render(request, 'myapp/authorization.html', {'form': form, 'error_message': error_message})
-
-def logout_view(request):
-    logout(request)
-    return redirect('index_recipes')
