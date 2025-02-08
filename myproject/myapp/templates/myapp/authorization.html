@@ -1,0 +1,33 @@
+{% extends "base.html" %} {% block title %}Авторизация{% endblock title %} {% block content %}
+<div class="container py-5">
+	<div class="row justify-content-center">
+		<div class="col-md-5">
+			<div class="card border-0 shadow-sm rounded-3">
+				<div class="card-body p-5">
+					<h2 class="text-center mb-4 applied-custom-peach">Вход в аккаунт</h2>
+
+					<form method="post">
+						{% csrf_token %} {{ form.as_p }}
+						<div class="d-grid gap-2 mb-4">
+							<button type="submit" class="btn bg-dark text-light py-2">Войти</button>
+						</div>
+
+						{% if error_message %}
+						<div class="alert alert-danger">{{ error_message }}</div>
+						{% endif %}
+
+						<div class="text-center">
+							<p class="mb-0">
+								Еще нет аккаунта?
+								<a href="{% url 'registration' %}" class="applied-custom-peach text-decoration-none">
+									Зарегистрироваться
+								</a>
+							</p>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}

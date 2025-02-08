@@ -6,6 +6,8 @@ from .views import get_five_random_recipes
 from .views import get_detailed_recipe
 from .views import register
 from .views import create_recipe
+from .views import login_view
+from .views import logout_view
 
 urlpatterns = [
     path('', index_recipes, name='index_recipes'),
@@ -13,7 +15,11 @@ urlpatterns = [
     path('detailed_recipe/', get_detailed_recipe, name='detailed_recipe'),
     path('registration/', register, name='registration'),
     path('create_recipe/', create_recipe, name='create_recipe'),
+    path('login/', login_view, name='login'),
+    path('logout/', logout_view, name='logout'),
 ]
+
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
