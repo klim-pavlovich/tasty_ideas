@@ -1,8 +1,9 @@
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
+from django.db import transaction
 from .models import Recipe, Category
-from .forms import RegistrationForm, RecipeForm
+from .forms import RegistrationForm, RecipeForm, LoginForm, RegistrationForm
 
 
 def create_recipe(request: HttpRequest):
@@ -61,13 +62,56 @@ def get_detailed_recipe(request: HttpRequest):
     return render(request, 'myapp/detailed_recipe.html', context)
 
 
-def register(request: HttpRequest):
-    """Регистрация пользователя."""
+def login_view(request):  # Именно такое название функции
+    if request.user.is_authenticated:
+        return redirect('index_recipes')
+
+    if request.method == 'POST':
+        form = LoginForm(data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('index_recipes')
+    else:
+        form = LoginForm()
+
+    return render(request, 'myapp/authorization.html', {'form': form})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('index_recipes')
+
+
+def register(request):
+    if request.user.is_authenticated:
+        return redirect('index_recipes')
+        
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            ...
+            try:
+                with transaction.atomic():
+
+                    # Создаем пользователя, но пока не сохраняем
+                    user = form.save(commit=False)
+                    user.is_active = True
+
+                    # Сохраняем пользователя
+                    user.save()
+    
+                    # Автоматически логиним пользователя
+                    login(request, user)
+
+                    return redirect('index_recipes')
+            except Exception as e:
+                # Логируем ошибку если что-то пошло не так
+                print(f"Error creating user: {e}")
+                form.add_error(None, "Произошла ошибка при регистрации. Попробуйте позже.")
     else:
         form = RegistrationForm()
+
     return render(request, 'myapp/registration.html', {'form': form})

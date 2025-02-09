@@ -1,62 +1,68 @@
-{% extends "base.html" %} {% block title %}Главная страница{% endblock title %}
-{% load static %}
-{% block content %}
-    <div class="container-fluid p-0">
-        <div class="row g-0 position-relative custom-top-content">
-            <div class="col">
-                <img src="{% static 'images/fruit-fresh-with-kiwi-slices.png' %}" class="img-fluid w-100" alt="photo">
-            </div>
-            <div class="col">
-                <img src="{% static 'images/slice-grilled-salmon.png' %}" class="img-fluid w-100" alt="photo">
-            </div>
-            <div class="col">
-                <img src="{% static 'images/vegetable-salad-with-tomatoes-cucumbers-radishes-cabbage-slice-lemon.png' %}" class="img-fluid w-100" alt="photo">
-            </div>
-            <div class="col">
-                <img src="{% static 'images/pancakes-covered-with-powdered-sugar.png' %}" class="img-fluid w-100" alt="photo">
-        </div>
-        <div class="custom-gradient-overlay"></div>
-        <div class="slogan position-absolute bottom-0  start-0">
-            <h1>
-                <span class="applied_custom-black">Открой</span><br>
-                <span class="applied-custom-peach"> магию</span><span class="applied-custom-orrange"> кухни</span><br>
-                <span class="applied-custom-pink"> в каждом</span><span class="applied-custom-yellow"> блюде</span>
-            </h1>
-        </div>
-    </div>
-    <section class="container category py-5">
-            <div class="category-top d-flex flex-row mb-4 align-items-center ">
-                <h1 class="col-5">Категории</h1>
-                <button class="btn btn-dark text-light ms-auto py-2">Смотреть все</button>
-            </div>
-            <div class="category-cards row g-4">
-                {% for category in categories %}
-                <div class="col-md-3">
-                    <div class="card card-custom">
-                        {% if category.photo %}
-                        <img src="{{ category.photo.url }}" class="card-img-top rounded-3" alt="{{ category.name }}">
-                        {% else %}
-                        <img src="/media/default_image.png" class="card-img-top" alt="{{ category.name }}">
-                        {% endif %}
-                        <div class="card-footer">
-                            <h3 class="card-title text-center">{{ category.name }}</h3>
-                        </div>
-                    </div>
-                </div>
-            {% empty %}
-                <p>Not Found</p>
-            {% endfor %}
-            </div>
-    </section>
-    <section class="container rounded-3 py-5 position-relative bg-light h-50">
-        <div class="position-absolute py-5 d-flex flex-column justify-content-center align-items-center text-center w-100">
-            <h1>Вдохновись и начинай готовить!</h1>
-            <p class="w-50">Ищи рецепты, сохраняй любимые и делись своими творениями! Присоединяйся сейчас и сделай готовку увлекательной!</p>
-            <button class="btn bg-dark text-light py-2">Создать аккаунт</button>
-        </div>
-        <div>
-            <img class="position-absolute bottom-0 end-0 h-75" src="{% static "images/green-broccoli.png" %}" alt="photo">
-            <img class="position-absolute bottom-0 start-0 h-75" src="{% static "images/delicious-sandwich.png" %}" alt="photo">
-        </div>
-    </section>
-{% endblock content %}
+{% extends "base.html" %} {% block title %}Главная страница{% endblock title %} {% load static %} {% block content %}
+<div class="container-fluid p-0">
+	<div class="row g-0 position-relative custom-top-content">
+		<div class="col">
+			<img src="{% static 'images/fruit-fresh-with-kiwi-slices.png' %}" class="img-fluid w-100" alt="photo" />
+		</div>
+		<div class="col">
+			<img src="{% static 'images/slice-grilled-salmon.png' %}" class="img-fluid w-100" alt="photo" />
+		</div>
+		<div class="col">
+			<img
+				src="{% static 'images/vegetable-salad-with-tomatoes-cucumbers-radishes-cabbage-slice-lemon.png' %}"
+				class="img-fluid w-100"
+				alt="photo"
+			/>
+		</div>
+		<div class="col">
+			<img src="{% static 'images/pancakes-covered-with-powdered-sugar.png' %}" class="img-fluid w-100" alt="photo" />
+		</div>
+		<div class="custom-gradient-overlay"></div>
+		<div class="slogan position-absolute bottom-0 start-0">
+			<h1>
+				<span class="applied_custom-black">Открой</span><br />
+				<span class="applied-custom-peach"> магию</span><span class="applied-custom-orrange"> кухни</span><br />
+				<span class="applied-custom-pink"> в каждом</span><span class="applied-custom-yellow"> блюде</span>
+			</h1>
+		</div>
+	</div>
+	<section class="container category py-5">
+		<div class="category-top d-flex flex-row mb-4 align-items-center">
+			<h1 class="col-5">Категории</h1>
+			<button class="btn btn-dark text-light ms-auto py-2">Смотреть все</button>
+		</div>
+		<div class="category-cards row g-4">
+			{% for category in categories %}
+			<div class="col-md-3">
+				<div class="card card-custom">
+					{% if category.photo %}
+					<img src="{{ category.photo.url }}" class="card-img-top rounded-3" alt="{{ category.name }}" />
+					{% else %}
+					<img src="/media/default_image.png" class="card-img-top" alt="{{ category.name }}" />
+					{% endif %}
+					<div class="card-footer">
+						<h3 class="card-title text-center">{{ category.name }}</h3>
+					</div>
+				</div>
+			</div>
+			{% empty %}
+			<p>Not Found</p>
+			{% endfor %}
+		</div>
+	</section>
+	<section class="container rounded-3 py-5 position-relative bg-light h-50">
+		<div class="position-absolute py-5 d-flex flex-column justify-content-center align-items-center text-center w-100">
+			<h1>Вдохновись и начинай готовить!</h1>
+			<p class="w-50">
+				Ищи рецепты, сохраняй любимые и делись своими творениями! Присоединяйся сейчас и сделай готовку увлекательной!
+			</p>
+			<button class="btn btn-dark text-light py-2">Создать аккаунт</button>
+		</div>
+		<div>
+			<img class="position-absolute bottom-0 end-0 h-75" src="{% static "images/green-broccoli.png" %}" alt="photo">
+			<img class="position-absolute bottom-0 start-0 h-75" src="{% static "images/delicious-sandwich.png" %}"
+			alt="photo">
+		</div>
+	</section>
+	{% endblock content %}
+</div>
