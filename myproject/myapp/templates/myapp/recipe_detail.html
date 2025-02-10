@@ -1,0 +1,106 @@
+{% extends 'base.html' %} {% block content %}
+<!-- Добавляем стили в начало блока -->
+<style>
+	/* Предотвращаем смещение контента */
+	body.modal-open {
+		padding-right: 0 !important;
+		overflow-y: scroll !important;
+	}
+
+	/* Фиксируем ширину контейнера */
+	.container {
+		width: 100% !important;
+		padding-right: var(--bs-gutter-x, 0.75rem) !important;
+		padding-left: var(--bs-gutter-x, 0.75rem) !important;
+	}
+</style>
+
+<div class="container py-4">
+	<div class="card">
+		<div class="card-body">
+			<h1 class="card-title">{{ recipe.title }}</h1>
+
+			{% if recipe.image_of_food %}
+			<img
+				src="{{ recipe.image_of_food.url }}"
+				class="img-fluid mb-3"
+				alt="{{ recipe.title }}"
+				style="max-width: 400px; height: auto"
+			/>
+			{% endif %}
+
+			<p class="card-text">{{ recipe.description }}</p>
+
+			<div class="mb-3">
+				<h5>Категории:</h5>
+				{% for category in categories %}
+				<span class="badge bg-secondary">{{ category.category.name }}</span>
+				{% endfor %}
+			</div>
+
+			<div class="mb-3">
+				<h5>Время приготовления:</h5>
+				<p>{{ recipe.cooking_time }} минут</p>
+			</div>
+
+			<div class="mb-3">
+				<h5>Ингредиенты:</h5>
+				<ul>
+					{% for ingredient in recipe.ingredients %}
+					<li>{{ ingredient.name }} - {{ ingredient.amount }} {{ ingredient.unit }}</li>
+					{% endfor %}
+				</ul>
+			</div>
+
+			<div class="mb-3">
+				<h5>Шаги приготовления:</h5>
+				<ol>
+					{% for step in recipe.cooking_steps %}
+					<li>{{ step }}</li>
+					{% endfor %}
+				</ol>
+			</div>
+
+			<!-- Добавляем модальное окно для подтверждения -->
+			<div
+				class="modal fade"
+				id="deleteConfirmModal"
+				tabindex="-1"
+				aria-labelledby="deleteConfirmModalLabel"
+				aria-hidden="true"
+			>
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="deleteConfirmModalLabel">Подтвердите действие на сайте 127.0.0.1</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">Вы уверены, что хотите удалить этот рецепт?</div>
+						<div class="modal-footer">
+							<form id="deleteForm" action="{% url 'delete_recipe' recipe.id %}" method="post" style="display: inline">
+								{% csrf_token %}
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
+								<button type="submit" class="btn btn-primary">Да</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{% if user == recipe.author %}
+			<div class="mt-4">
+				<a href="{% url 'edit_recipe' recipe.id %}" class="btn btn-outline-primary btn-sm">Редактировать</a>
+				<button
+					type="button"
+					class="btn btn-outline-danger btn-sm"
+					data-bs-toggle="modal"
+					data-bs-target="#deleteConfirmModal"
+				>
+					Удалить
+				</button>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}

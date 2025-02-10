@@ -30,9 +30,11 @@
                   <a class="nav-link text-dark {% if request.path == '/' %}active{% endif %} me-2" href="{% url 'index_recipes' %}">Главная</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link text-dark {% if request.path == '/detailed_recipe/' %}active{% endif %}" href="{% url 'detailed_recipe' %}">Рецепты</a>
+                  <a class="nav-link text-dark {% if request.path == '/recipes_page/' %}active{% endif %}" href="{% url 'recipes_page' %}">Рецепты</a>
                 </li>
                 <li class="nav-item">
+
+
                   <a class="nav-link text-dark {% if request.path == '/recipes/' %}active{% endif %}" href="{% url 'index_recipes' %}">Блог</a>
                 </li>
                 <li class="nav-item">

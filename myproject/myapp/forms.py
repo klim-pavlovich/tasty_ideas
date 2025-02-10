@@ -4,25 +4,73 @@ from django.contrib.auth.models import User
 from myapp.models import Recipe
 import re
 
-class RecipeForm (forms.ModelForm):
+class RecipeForm(forms.ModelForm):
     class Meta:
         model = Recipe
-        fields = ['title', 'description', 'cooking_steps', 'cooking_time', 'image_of_food', 'ingredients']
+        fields = ['title', 'description', 'cooking_time', 'image_of_food']
 
         widgets = {
-            'title': forms.Textarea(attrs={'col': 80, 'rows': 4}),
-            'description': forms.Textarea(attrs={'cols': 80, 'rows': 4}),
-            'cooking_steps': forms.Textarea(attrs={'cols': 80, 'rows': 6}),
-            'cooking_time': forms.NumberInput(attrs={'cols': 80, 'rows': 1, 'min': 1}),
-            'ingredients': forms.Textarea(attrs={'cols': 80, 'rows': 6}),
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Введите название блюда'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Опишите блюдо',
+                'rows': 4
+            }),
+            'cooking_time': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 1,
+                'placeholder': 'Время в минутах'
+            }),
+            'image_of_food': forms.FileInput(attrs={
+                'class': 'form-control'
+            })
         }
 
-    # Дополнительная валидация для поля cooking_time
     def clean_cooking_time(self):
         cooking_time = self.cleaned_data.get('cooking_time')
         if cooking_time is not None and cooking_time < 1:
             raise forms.ValidationError('Время готовки должно быть больше 0 минут.')
         return cooking_time
+
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        # Проверка категорий
+        categories = self.data.getlist('categories')
+        if not categories:
+            self.add_error(None, "Выберите хотя бы одну категорию")
+        
+        # Проверка ингредиентов
+        ingredient_names = self.data.getlist('ingredient_name[]')
+        ingredient_amounts = self.data.getlist('ingredient_amount[]')
+        
+        if not any(name.strip() for name in ingredient_names):
+            self.add_error(None, "Добавьте хотя бы один ингредиент")
+        else:
+            for i, name in enumerate(ingredient_names):
+                if name.strip() and not ingredient_amounts[i].strip():
+                    self.add_error(None, f"Укажите количество для ингредиента '{name}'")
+                elif not name.strip() and ingredient_amounts[i].strip():
+                    self.add_error(None, "Укажите название ингредиента")
+
+        # Проверка шагов приготовления
+        cooking_steps = self.data.getlist('cooking_step[]')
+        if not any(step.strip() for step in cooking_steps):
+            self.add_error(None, "Добавьте хотя бы один шаг приготовления")
+        else:
+            for i, step in enumerate(cooking_steps):
+                if not step.strip():
+                    self.add_error(None, f"Шаг {i+1} не может быть пустым")
+
+        # Добавляем пустые значения для ingredients и cooking_steps,
+        # так как они будут заполнены позже
+        cleaned_data['ingredients'] = []
+        cleaned_data['cooking_steps'] = []
+        
+        return cleaned_data
 
 
 class LoginForm(AuthenticationForm):

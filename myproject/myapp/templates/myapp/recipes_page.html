@@ -1,0 +1,79 @@
+{% extends "base.html" %} {% block title %}Рецепты{% endblock title %} {% load static %} {% block content %}
+
+<div class="container py-5">
+	<h1 class="text-center mb-5">Добро пожаловать в мир вкусных идей!</h1>
+
+	<!-- Верхний ряд карточек -->
+	<div class="row mb-5">
+		<!-- Мои рецепты -->
+		<div class="col-md-6">
+			<div class="card recipe-card h-100">
+				<div class="card-body text-center d-flex flex-column">
+					<div class="card-image-wrapper mb-4">
+						<img src="{% static 'images/my_recipes.jpg' %}" class="card-img-top rounded-3" alt="Мои рецепты" />
+					</div>
+					<h3 class="card-title mb-3">Мои рецепты</h3>
+					{% if user.is_authenticated %}
+					<p class="card-text flex-grow-1">Просматривайте и редактируйте свои кулинарные шедевры</p>
+					<a href="{% url 'my_recipes' %}" class="btn btn-dark btn-lg mt-3"> Мои рецепты </a>
+					{% else %}
+					<p class="card-text flex-grow-1">Зайдите в свой аккаунт, чтобы посмотреть свои рецепты</p>
+					<a href="{% url 'login' %}" class="btn btn-dark btn-lg mt-3"> Войти </a>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+
+		<!-- Создать рецепт -->
+		<div class="col-md-6">
+			<div class="card recipe-card h-100">
+				<div class="card-body text-center d-flex flex-column">
+					<div class="card-image-wrapper mb-4">
+						<img src="{% static 'images/create_recipe.jpg' %}" class="card-img-top rounded-3" alt="Создать рецепт" />
+					</div>
+					<h3 class="card-title mb-3">Создать рецепт</h3>
+					{% if user.is_authenticated %}
+					<p class="card-text flex-grow-1">Поделитесь своими кулинарными идеями с другими</p>
+					<a href="{% url 'create_recipe' %}" class="btn btn-dark btn-lg mt-3"> Создать рецепт </a>
+					{% else %}
+					<p class="card-text flex-grow-1">Зайдите в свой аккаунт, чтобы создать рецепт</p>
+					<a href="{% url 'login' %}" class="btn btn-dark btn-lg mt-3"> Войти </a>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Нижний ряд карточек -->
+	<div class="row">
+		<!-- Все рецепты -->
+		<div class="col-md-6">
+			<div class="card recipe-card h-100">
+				<div class="card-body text-center d-flex flex-column">
+					<div class="card-image-wrapper mb-4">
+						<img src="{% static 'images/all_recipes.jpg' %}" class="card-img-top rounded-3" alt="Все рецепты" />
+					</div>
+					<h3 class="card-title mb-3">Все рецепты</h3>
+					<p class="card-text flex-grow-1">Исследуйте коллекцию рецептов нашего сообщества</p>
+					<a href="{% url 'index_recipes' %}" class="btn btn-dark btn-lg mt-3"> Смотреть все рецепты </a>
+				</div>
+			</div>
+		</div>
+
+		<!-- Категории -->
+		<div class="col-md-6">
+			<div class="card recipe-card h-100">
+				<div class="card-body text-center d-flex flex-column">
+					<div class="card-image-wrapper mb-4">
+						<img src="{% static 'images/categories.jpg' %}" class="card-img-top rounded-3" alt="Категории" />
+					</div>
+					<h3 class="card-title mb-3">Категории</h3>
+					<p class="card-text flex-grow-1">Находите рецепты по категориям</p>
+					<a href="{% url 'categories' %}" class="btn btn-dark btn-lg mt-3"> Смотреть категории </a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock content %}

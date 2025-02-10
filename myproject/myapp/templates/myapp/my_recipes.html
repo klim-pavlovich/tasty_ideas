@@ -1,0 +1,41 @@
+{% extends "base.html" %} {% block title %}Мои рецепты{% endblock title %} {% block content %}
+<div class="container py-5">
+	<h1 class="mb-4 text-center">Мои рецепты</h1>
+	<div class="row g-4">
+		{% if user.is_authenticated %} {% for recipe in recipes %}
+		<div class="col-md-4">
+			<div class="card recipe-card">
+				<img src="{{ recipe.image_of_food.url }}" class="card-img-top" alt="{{ recipe.title }}" />
+				<div class="card-body">
+					<h5 class="card-title">{{ recipe.title }}</h5>
+					<p class="card-text">{{ recipe.description|truncatewords:20 }}</p>
+					<div class="d-flex justify-content-between align-items-center">
+						<small class="text-muted">{{ recipe.created_at|date:"d.m.Y" }}</small>
+						<div class="btn-group">
+							<a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-outline-secondary btn-sm">Просмотр</a>
+							<a href="{% url 'edit_recipe' recipe.id %}" class="btn btn-outline-primary btn-sm">Редактировать</a>
+							<a
+								href="{% url 'delete_recipe' recipe.id %}"
+								class="btn btn-outline-danger btn-sm"
+								onclick="return confirm('Вы уверены, что хотите удалить этот рецепт?')"
+								>Удалить</a
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{% empty %}
+		<div class="col-12 text-center">
+			<p>У вас пока нет рецептов</p>
+			<a href="{% url 'create_recipe' %}" class="btn btn-primary">Создать первый рецепт</a>
+		</div>
+		{% endfor %} {% else %}
+		<div class="col-12 text-center">
+			<p>Зайдите в свой аккаунт, чтобы посмотреть свои рецепты</p>
+			<a href="{% url 'login' %}" class="btn btn-primary">Войти</a>
+		</div>
+		{% endif %}
+	</div>
+</div>
+{% endblock content %}

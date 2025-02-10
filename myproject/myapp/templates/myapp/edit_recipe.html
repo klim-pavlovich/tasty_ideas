@@ -1,0 +1,404 @@
+{% extends "base.html" %}
+{% load recipe_tags %}
+
+{% block title %}Редактирование рецепта{% endblock %}
+{% block content %}
+<div class="container py-5">
+	<div class="row justify-content-center">
+		<div class="col-lg-8">
+			<div class="card shadow-sm">
+				<div class="card-body p-4">
+					<h1 class="card-title text-center mb-4">Редактирование рецепта</h1>
+
+					{% if messages %}
+					<div class="messages mb-4">
+						{% for message in messages %}
+						<div class="alert alert-{{ message.tags }}">{{ message }}</div>
+						{% endfor %}
+					</div>
+					{% endif %}
+
+					<form method="post" enctype="multipart/form-data" novalidate>
+						{% csrf_token %}
+
+						{% if form.non_field_errors %}
+						<div class="alert alert-danger">
+							{% for error in form.non_field_errors %}
+								{{ error }}
+							{% endfor %}
+						</div>
+						{% endif %}
+
+						<!-- Название блюда -->
+						<div class="mb-3">
+							<label class="form-label fw-bold">Название блюда *</label>
+							{{ form.title }}
+							<div class="text-danger mt-1 small title-error" style="display: none;">
+								Введите название блюда
+							</div>
+						</div>
+
+						<!-- Описание -->
+						<div class="mb-3">
+							<label class="form-label fw-bold">Краткое описание *</label>
+							{{ form.description }}
+							<div class="text-danger mt-1 small description-error" style="display: none;">
+								Добавьте описание блюда
+							</div>
+						</div>
+
+						<!-- Категории -->
+						<div class="mb-4">
+							<label class="form-label fw-bold">Категории *</label>
+							<div class="d-flex flex-wrap gap-3" id="categories-container">
+								{% for category in categories %}
+								<div class="form-check">
+									<input type="checkbox" 
+										   class="form-check-input category-checkbox" 
+										   name="categories" 
+										   value="{{ category.id }}" 
+										   id="category{{ category.id }}"
+										   {% if category.id in selected_categories %}checked{% endif %} />
+									<label class="form-check-label" for="category{{ category.id }}">
+										{{ category.name }}
+									</label>
+								</div>
+								{% endfor %}
+							</div>
+							<div class="text-danger mt-1 small category-error" style="display: none;">
+								Выберите хотя бы одну категорию
+							</div>
+						</div>
+
+						<!-- Время приготовления -->
+						<div class="mb-3">
+							<label class="form-label fw-bold">Время приготовления (в минутах) *</label>
+							{{ form.cooking_time }}
+							<div class="text-danger mt-1 small cooking-time-error" style="display: none;">
+								Укажите время приготовления
+							</div>
+						</div>
+
+						<!-- Ингредиенты -->
+						<div class="mb-3">
+							<label class="form-label fw-bold">Ингредиенты *</label>
+							<div id="ingredients-container">
+								{% for ingredient in recipe.ingredients %}
+								<div class="ingredient-row mb-2">
+									<div class="d-flex gap-2">
+										<input type="text" 
+											   class="form-control" 
+											   name="ingredient_name[]" 
+											   placeholder="Название ингредиента" 
+											   value="{{ ingredient.name }}" 
+											   required />
+										<input type="text" 
+											   class="form-control" 
+											   name="ingredient_amount[]" 
+											   placeholder="Количество" 
+											   value="{{ ingredient.amount }}" 
+											   pattern="^[0-9,.]+$" 
+											   required />
+										<select class="form-select" name="ingredient_unit[]" required>
+											{% for unit in units %}
+												<option value="{{ unit.0 }}" 
+														{% if unit.0 == ingredient.unit %}selected{% endif %}>
+													{{ unit.1 }}
+												</option>
+											{% endfor %}
+										</select>
+										<button type="button" class="btn btn-outline-danger" onclick="removeIngredient(this)">×</button>
+									</div>
+									<div class="text-danger mt-1 small ingredient-name-error" style="display: none;">
+										Заполните название ингредиента
+									</div>
+									<div class="text-danger mt-1 small ingredient-amount-error" style="display: none;">
+										Укажите количество
+									</div>
+								</div>
+								{% endfor %}
+							</div>
+							<div class="text-danger mt-1 small ingredients-container-error" style="display: none;">
+								Добавьте хотя бы один ингредиент
+							</div>
+							<button type="button" class="btn btn-outline-primary mt-2" onclick="addIngredient()">
+								Добавить ингредиент
+							</button>
+						</div>
+
+						<!-- Шаги приготовления -->
+						<div class="mb-3">
+							<label class="form-label fw-bold">Шаги приготовления *</label>
+							<div id="steps-container">
+								{% for step in recipe.cooking_steps %}
+								<div class="step-row mb-2">
+									<div class="d-flex gap-2">
+										<input type="text" 
+											   class="form-control" 
+											   name="cooking_step[]" 
+											   placeholder="Опишите шаг приготовления" 
+											   value="{{ step }}" 
+											   required />
+										<button type="button" class="btn btn-outline-danger" onclick="removeStep(this)">×</button>
+									</div>
+									<div class="text-danger mt-1 small step-error" style="display: none;">
+										Шаг не может быть пустым
+									</div>
+								</div>
+								{% endfor %}
+							</div>
+							<div class="text-danger mt-1 small steps-container-error" style="display: none;">
+								Добавьте хотя бы один шаг приготовления
+							</div>
+							<button type="button" class="btn btn-outline-primary mt-2" onclick="addStep()">
+								Добавить шаг
+							</button>
+						</div>
+
+						<!-- Фото -->
+						<div class="mb-3">
+							<label class="form-label fw-bold">Фото готового блюда</label>
+							{% if recipe.image_of_food %}
+							<div class="mb-2">
+								<img src="{{ recipe.image_of_food.url }}" alt="Текущее фото" class="img-thumbnail" style="max-height: 200px;">
+							</div>
+							{% endif %}
+							{{ form.image_of_food }}
+							<div class="text-danger mt-1 small image-error" style="display: none;">
+								Добавьте фотографию блюда
+							</div>
+						</div>
+
+						<!-- Кнопки -->
+						<div class="d-flex justify-content-center gap-3 mt-4">
+							<button type="button" class="btn btn-outline-secondary" onclick="history.back()">Отмена</button>
+							<button type="submit" class="btn btn-primary">Сохранить изменения</button>
+						</div>
+					</form>
+
+					<!-- Сообщения об ошибках -->
+					{% if attempted_save %}  <!-- Показываем ошибки только после попытки сохранения -->
+						{% if empty_fields %}
+						<div class="alert alert-danger text-center mt-3">
+							Все поля должны быть заполнены
+						</div>
+						{% endif %}
+
+						{% if no_category %}
+						<div class="alert alert-danger text-center mt-3">
+							Выберите хотя бы одну категорию
+						</div>
+						{% endif %}
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+// Копируем весь JavaScript код из create_recipe.html
+document.querySelector('form').addEventListener('submit', function(e) {
+	let isValid = true;
+
+	// Проверка названия
+	const titleInput = document.querySelector('input[name="title"]');
+	const titleError = document.querySelector('.title-error');
+	if (!titleInput.value.trim()) {
+		isValid = false;
+		titleError.style.display = 'block';
+	} else {
+		titleError.style.display = 'none';
+	}
+
+	// Проверка описания
+	const descriptionInput = document.querySelector('textarea[name="description"]');
+	const descriptionError = document.querySelector('.description-error');
+	if (!descriptionInput.value.trim()) {
+		isValid = false;
+		descriptionError.style.display = 'block';
+	} else {
+		descriptionError.style.display = 'none';
+	}
+
+	// Проверка времени приготовления
+	const cookingTimeInput = document.querySelector('input[name="cooking_time"]');
+	const cookingTimeError = document.querySelector('.cooking-time-error');
+	if (!cookingTimeInput.value || cookingTimeInput.value < 1) {
+		isValid = false;
+		cookingTimeError.style.display = 'block';
+	} else {
+		cookingTimeError.style.display = 'none';
+	}
+
+	// Проверка категорий
+	const categories = document.querySelectorAll('input[name="categories"]:checked');
+	const categoryError = document.querySelector('.category-error');
+	if (categories.length === 0) {
+		isValid = false;
+		categoryError.style.display = 'block';
+	} else {
+		categoryError.style.display = 'none';
+	}
+
+	// Проверка ингредиентов
+	const ingredientRows = document.querySelectorAll('.ingredient-row');
+	let hasValidIngredient = false;
+	
+	ingredientRows.forEach(row => {
+		const nameInput = row.querySelector('input[name="ingredient_name[]"]');
+		const amountInput = row.querySelector('input[name="ingredient_amount[]"]');
+		const nameError = row.querySelector('.ingredient-name-error');
+		const amountError = row.querySelector('.ingredient-amount-error');
+
+		// Сбрасываем предыдущие ошибки
+		nameError.style.display = 'none';
+		amountError.style.display = 'none';
+
+		const hasName = nameInput.value.trim() !== '';
+		const hasAmount = amountInput.value.trim() !== '';
+		const isValidAmount = /^[0-9,.]+$/.test(amountInput.value.trim());
+
+		if (hasName && hasAmount) {
+			if (!isValidAmount) {
+				// Если количество не является числом
+				isValid = false;
+				amountError.textContent = 'Количество должно быть числом';
+				amountError.style.display = 'block';
+			} else {
+				hasValidIngredient = true;
+			}
+		} else if (hasName && !hasAmount) {
+			// Если есть название, но нет количества
+			isValid = false;
+			amountError.textContent = 'Укажите количество';
+			amountError.style.display = 'block';
+		} else if (!hasName && hasAmount) {
+			// Если есть количество, но нет названия
+			isValid = false;
+			nameError.style.display = 'block';
+		} else if (!hasName && !hasAmount && ingredientRows.length === 1) {
+			// Если оба поля пустые и это единственный ингредиент
+			isValid = false;
+			nameError.style.display = 'block';
+			amountError.textContent = 'Укажите количество';
+			amountError.style.display = 'block';
+		}
+	});
+
+	// Проверка на наличие хотя бы одного заполненного ингредиента
+	const ingredientsContainerError = document.querySelector('.ingredients-container-error');
+	if (!hasValidIngredient) {
+		isValid = false;
+		ingredientsContainerError.style.display = 'block';
+	} else {
+		ingredientsContainerError.style.display = 'none';
+	}
+
+	// Проверка шагов
+	const stepRows = document.querySelectorAll('.step-row');
+	let hasValidStep = false;
+	stepRows.forEach((row, index) => {
+		const input = row.querySelector('input[name="cooking_step[]"]');
+		const errorDiv = row.querySelector('.step-error');
+		
+		if (input.value.trim()) {
+			hasValidStep = true;
+			errorDiv.style.display = 'none';
+		} else {
+			isValid = false;
+			errorDiv.textContent = `Шаг ${index + 1} не может быть пустым`;
+			errorDiv.style.display = 'block';
+		}
+	});
+
+	const stepsContainerError = document.querySelector('.steps-container-error');
+	if (!hasValidStep) {
+		isValid = false;
+		stepsContainerError.style.display = 'block';
+	} else {
+		stepsContainerError.style.display = 'none';
+	}
+
+	if (!isValid) {
+		e.preventDefault();
+	}
+});
+
+// Функции добавления/удаления ингредиентов и шагов
+function addIngredient() {
+	const container = document.getElementById('ingredients-container');
+	const newRow = document.createElement('div');
+	newRow.className = 'ingredient-row mb-2';
+	
+	// Получаем текущий select с единицами измерения
+	const currentSelect = document.querySelector('select[name="ingredient_unit[]"]');
+	const selectOptions = currentSelect.innerHTML;
+	
+	newRow.innerHTML = `
+		<div class="d-flex gap-2">
+			<input type="text" class="form-control" name="ingredient_name[]" 
+				   placeholder="Название ингредиента" required />
+			<input type="text" class="form-control" name="ingredient_amount[]" 
+				   placeholder="Количество" pattern="^[0-9,.]+$" required />
+			<select class="form-select" name="ingredient_unit[]" required>
+				${selectOptions}
+			</select>
+			<button type="button" class="btn btn-outline-danger" onclick="removeIngredient(this)">×</button>
+		</div>
+		<div class="text-danger mt-1 small ingredient-name-error" style="display: none;">
+			Заполните название ингредиента
+		</div>
+		<div class="text-danger mt-1 small ingredient-amount-error" style="display: none;">
+			Укажите количество
+		</div>
+	`;
+	container.appendChild(newRow);
+}
+
+function removeIngredient(button) {
+	const container = document.getElementById('ingredients-container');
+	if (container.children.length > 1) {
+		button.closest('.ingredient-row').remove();
+	}
+}
+
+function addStep() {
+	const container = document.getElementById('steps-container');
+	const newRow = document.createElement('div');
+	newRow.className = 'step-row mb-2';
+	newRow.innerHTML = `
+		<div class="d-flex gap-2">
+			<input type="text" class="form-control" name="cooking_step[]" 
+				   placeholder="Опишите шаг приготовления" required />
+			<button type="button" class="btn btn-outline-danger" onclick="removeStep(this)">×</button>
+		</div>
+		<div class="text-danger mt-1 small step-error" style="display: none;">
+			Шаг не может быть пустым
+		</div>
+	`;
+	container.appendChild(newRow);
+}
+
+function removeStep(button) {
+	const container = document.getElementById('steps-container');
+	if (container.children.length > 1) {
+		button.closest('.step-row').remove();
+	}
+}
+
+// Валидация при вводе в поле количества
+document.addEventListener('input', function(e) {
+	if (e.target.matches('input[name="ingredient_amount[]"]')) {
+		const value = e.target.value;
+		if (value && !/^[0-9,.]+$/.test(value)) {
+			e.target.value = value.replace(/[^0-9,.]/g, '');
+		}
+	}
+});
+</script>
+
+<style>
+/* Добавьте необходимые стили здесь */
+</style>
+{% endblock %}
