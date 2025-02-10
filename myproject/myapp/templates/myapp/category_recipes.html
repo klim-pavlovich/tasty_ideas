@@ -1,0 +1,26 @@
+{% extends "base.html" %} {% load static %} {% block title %} Рецепты {% endblock title %} {% block content %}
+<div class="container py-5">
+	<h1 class="mb-4">{{ category.name }}</h1>
+
+	<div class="row g-4">
+		{% for recipe in recipes %}
+		<div class="col-md-4">
+			<div class="card recipe-card">
+				{% if recipe.photo %}
+				<img src="{{ recipe.photo.url }}" class="card-img-top" alt="{{ recipe.name }}" />
+				{% endif %}
+				<div class="card-body">
+					<h5 class="card-title">{{ recipe.name }}</h5>
+					<p class="card-text">{{ recipe.description|truncatewords:20 }}</p>
+					<a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-dark">Подробнее</a>
+				</div>
+			</div>
+		</div>
+		{% empty %}
+		<div class="col-12">
+			<p class="text-center">В этой категории пока нет рецептов</p>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}

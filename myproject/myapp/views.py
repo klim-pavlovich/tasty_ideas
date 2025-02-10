@@ -306,3 +306,15 @@ def recipe_detail(request, recipe_id):
 
 def blog(request):
     return render(request, 'myapp/blog.html')
+
+def categories_view(request):
+    categories = Category.objects.all()
+    return render(request, 'myapp/categories.html', {'categories': categories})
+
+def category_recipes(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    recipes = Recipe.objects.filter(recipecategory__category=category)
+    return render(request, 'myapp/category_recipes.html', {
+        'category': category,
+        'recipes': recipes
+    })
