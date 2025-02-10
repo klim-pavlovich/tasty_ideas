@@ -215,3 +215,45 @@ img.img-fluid {
 		height: 200px; /* Меньшая высота для мобильных устройств */
 	}
 }
+
+.blog-post {
+	line-height: 1.6;
+}
+
+.blog-post h1 {
+	color: #333;
+	margin-bottom: 2rem;
+}
+
+.blog-post h2,
+.blog-post h3 {
+	color: #444;
+	margin-top: 1.5rem;
+}
+
+.blog-content {
+	font-size: 1.1rem;
+}
+
+.blog-content ul {
+	margin-bottom: 1rem;
+}
+
+.blog-content li {
+	margin-bottom: 0.5rem;
+}
+
+.alert-info {
+	background-color: rgba(236, 116, 64, 0.1); /* Персиковый цвет с прозрачностью */
+	border-color: var(--custom-peach-color);
+	border-left: 4px solid var(--custom-peach-color);
+}
+
+.alert-info h4 {
+	color: var(--custom-peach-color);
+	font-weight: 600;
+}
+
+.alert-info ul {
+	color: var(--custom-black-color);
+}

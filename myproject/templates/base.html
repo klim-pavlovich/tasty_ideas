@@ -35,9 +35,10 @@
                 <li class="nav-item">
 
 
-                  <a class="nav-link text-dark {% if request.path == '/recipes/' %}active{% endif %}" href="{% url 'index_recipes' %}">Блог</a>
+                  <a class="nav-link text-dark {% if request.path == '/blog/' %}active{% endif %}" href="{% url 'blog' %}">Блог</a>
                 </li>
                 <li class="nav-item">
+
                   <a class="nav-link text-dark {% if request.path == '/recipes/' %}active{% endif %}" href="{% url 'index_recipes' %}">О нас</a>
                 </li>
               </ul>

@@ -303,3 +303,6 @@ def recipe_detail(request, recipe_id):
         'categories': recipe_categories,
     }
     return render(request, 'myapp/recipe_detail.html', context)
+
+def blog(request):
+    return render(request, 'myapp/blog.html')
