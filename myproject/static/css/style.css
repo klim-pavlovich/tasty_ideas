@@ -8,6 +8,9 @@
 	); /* Можно сохранить градиент */
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Легкая тень */
 	z-index: 3;
+	position: fixed;
+	width: 100%;
+	top: 0;
 }
 
 .header .navbar-brand img {
@@ -112,7 +115,14 @@ img.img-fluid {
 }
 
 /* Index Page */
+.main-content-wrapper {
+	padding-top: 70px; /* Высота хедера */
+	width: 100%;
+	position: relative;
+}
+
 .custom-top-content {
+	margin-top: 0; /* Убираем margin, так как padding есть у wrapper */
 	position: relative;
 	width: 100%;
 }
@@ -206,6 +216,45 @@ img.img-fluid {
 }
 
 /* Адаптивность для мобильных устройств */
+@media (max-width: 865px) {
+	.slogan {
+		bottom: 20px; /* Прижимаем к низу */
+		left: 20px; /* Отступ слева */
+		right: 20px; /* Ограничиваем справа для лучшей читаемости */
+		z-index: 2;
+	}
+
+	.slogan h1 {
+		font-size: 80px !important;
+		line-height: 1.2;
+		margin-bottom: 10px;
+	}
+
+	/* Усиливаем градиент для лучшей читаемости текста */
+	.custom-gradient-overlay {
+		background: linear-gradient(
+			180deg,
+			rgba(255, 255, 255, 0) 0%,
+			rgba(255, 255, 255, 0.9) 40%,
+			rgba(255, 255, 255, 1) 100%
+		);
+		height: 80%; /* Увеличиваем высоту градиента */
+	}
+}
+
+/* Дополнительные стили для еще меньших экранов */
+@media (max-width: 576px) {
+	.slogan {
+		bottom: 15px;
+		left: 15px;
+	}
+
+	.slogan h1 {
+		font-size: 40px !important;
+		margin-bottom: 5px;
+	}
+}
+
 @media (max-width: 768px) {
 	.recipe-card {
 		margin-bottom: 20px;
@@ -213,6 +262,10 @@ img.img-fluid {
 
 	.card-image-wrapper {
 		height: 200px; /* Меньшая высота для мобильных устройств */
+	}
+
+	.main-content-wrapper {
+		padding-top: 60px; /* Меньшая высота для мобильных */
 	}
 }
 
@@ -367,5 +420,74 @@ img.img-fluid {
 	.nav-item .btn-dark {
 		width: 100%;
 		margin: 0.5rem 0;
+	}
+}
+
+/* Стили для секции категорий */
+.category {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+/* Стили для карточек */
+.category-cards {
+	margin: 0;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr); /* По умолчанию 4 колонки */
+	gap: 20px;
+}
+
+.card-custom {
+	height: 100%;
+}
+
+.card-custom .card-img-top {
+	height: 200px;
+	object-fit: cover;
+}
+
+/* Адаптивная сетка для экранов меньше 992px */
+@media (max-width: 991px) {
+	.category-cards {
+		grid-template-columns: repeat(2, 1fr); /* 2 колонки */
+	}
+}
+
+/* Мобильная версия */
+@media (max-width: 576px) {
+	.category-cards {
+		grid-template-columns: 1fr; /* 1 колонка */
+	}
+
+	.category {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+
+	.category-cards > div {
+		margin-bottom: 20px;
+	}
+}
+
+/* Стили для нижнего блока на мобильных устройствах */
+@media (max-width: 571px) {
+	.alarm_to_action {
+		padding: 2rem 1rem !important; /* Уменьшаем padding */
+		min-height: auto !important; /* Убираем фиксированную высоту */
+		height: auto !important; /* Высота по контенту */
+	}
+
+	.alarm_to_action img {
+		display: none !important;
+	}
+
+	/* Стили для контейнера с текстом и кнопкой */
+	.alarm_to_action .position-absolute {
+		position: relative !important;
+		padding: 0 !important;
+	}
+
+	.alarm_to_action .w-50 {
+		width: 100% !important; /* Текст на всю ширину на мобильных */
 	}
 }
