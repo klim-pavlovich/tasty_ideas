@@ -7,7 +7,8 @@
 					<h2 class="text-center mb-4 applied-custom-peach">Регистрация</h2>
 
 					<form method="post">
-						{% csrf_token %} {# Поле имени пользователя #}
+						{% csrf_token %}
+						<!-- Поле имени пользователя -->
 						<div class="mb-4">
 							<label for="{{ form.username.id_for_label }}" class="form-label"> {{ form.username.label }} </label>
 							{{ form.username }} {% if form.username.errors %}
@@ -15,7 +16,7 @@
 							{% endif %}
 						</div>
 
-						{# Поле email #}
+						<!-- Поле email -->
 						<div class="mb-4">
 							<label for="{{ form.email.id_for_label }}" class="form-label"> {{ form.email.label }} </label>
 							{{ form.email }} {% if form.email.errors %}
@@ -23,7 +24,7 @@
 							{% endif %}
 						</div>
 
-						{# Поле пароля #}
+						<!-- Поле пароля -->
 						<div class="mb-4">
 							<label for="{{ form.password1.id_for_label }}" class="form-label"> {{ form.password1.label }} </label>
 							{{ form.password1 }} {% if form.password1.errors %}
@@ -31,7 +32,7 @@
 							{% endif %}
 						</div>
 
-						{# Поле подтверждения пароля #}
+						<!-- Поле подтверждения пароля -->
 						<div class="mb-4">
 							<label for="{{ form.password2.id_for_label }}" class="form-label"> {{ form.password2.label }} </label>
 							{{ form.password2 }} {% if form.password2.errors %}
@@ -39,10 +40,12 @@
 							{% endif %}
 						</div>
 
+						<!-- Кнопка регистрации -->
 						<div class="d-grid gap-2 mb-4">
 							<button type="submit" class="btn btn-primary btn-dark">Зарегистрироваться</button>
 						</div>
 
+						<!-- Ссылка на страницу входа -->
 						<div class="text-center">
 							<p class="mb-0">
 								Уже есть аккаунт?

@@ -9,19 +9,23 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('registration/', views.register, name='registration'),
-    path('random_recipes/', views.get_five_random_recipes, name='random_recipes'),
-    path('detailed_recipe/', views.get_detailed_recipe, name='detailed_recipe'),
+
     path('recipes_page/', views.recipes_page, name='recipes_page'),
     path('create_recipe/', views.create_recipe, name='create_recipe'),
-    path('categories/', views.categories, name='categories'),
-    path('my_recipes/', views.my_recipes, name='my_recipes'),
     path('edit_recipe/<int:recipe_id>/', views.edit_recipe, name='edit_recipe'),
     path('delete_recipe/<int:recipe_id>/', views.delete_recipe, name='delete_recipe'),
-    path('recipe/<int:recipe_id>/', views.recipe_detail, name='recipe_detail'),
-    path('blog/', views.blog, name='blog'),
-    path('category/<int:category_id>/', views.category_recipes, name='category_recipes'),
-]
+    path('recipe/<int:recipe_id>/', views.get_detailed_recipe, name='recipe_detail'),
+    path('get_detailed_recipe/', views.get_detailed_recipe, name='detailed_recipe'),
+    path('my_recipes/', views.my_recipes, name='my_recipes'),
+    path('all_recipes/', views.all_recipes, name='all_recipes'),
 
+    path('categories/', views.categories, name='categories'),
+    path('category/<int:category_id>/', views.category_recipes, name='category_recipes'),
+    path('blog/', views.blog, name='blog'),
+
+    path('five_random_recipes/', views.get_five_random_recipes, name='five_random_recipes'),
+    path('random_recipe/', views.get_random_recipe, name='random_recipe'),
+]
 
 
 if settings.DEBUG:

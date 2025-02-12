@@ -1,13 +1,13 @@
-{% extends "base.html" %} {% load static %} {% block title %}{{ category.name }}{% endblock title %} {% block content %}
+{% extends "base.html" %} {% block title %}Все рецепты{% endblock title %} {% block content %}
 <div class="container py-5">
-	<h1 class="mb-4">{{ category.name }}</h1>
+	<h1 class="mb-4 text-center">Все рецепты</h1>
 	<div class="row g-4">
 		{% if recipes %} {% for recipe in recipes %}
 		<div class="col-md-4">
 			<div class="card recipe-card">
 				{% if recipe.image_of_food %}
 				<img src="{{ recipe.image_of_food.url }}" class="card-img-top" alt="{{ recipe.title }}" />
-				{% endif %}
+				{% endif %} {# Блок с информацией о рецепте #}
 				<div class="card-body">
 					<h5 class="card-title">{{ recipe.title }}</h5>
 					<p class="card-text">{{ recipe.description|truncatewords:20 }}</p>
@@ -19,6 +19,7 @@
 							<br />
 						</small>
 					</div>
+					{# Блок с кнопками действий над рецептом #}
 					<div class="btn-group mt-3 d-flex justify-content-between align-items-center">
 						<a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-outline-secondary btn-sm">Просмотр</a>
 						{% if user.is_authenticated and user == recipe.author %}
@@ -35,16 +36,16 @@
 				</div>
 			</div>
 		</div>
-		{% endfor %} {% else %}
-		<div class="text-center py-5">
-			<p class="mb-4">В этой категории еще нет рецептов. Стань первым!</p>
+		{% endfor %} {% else %} {# Обработка случая, когда нет ни одного рецепта #}
+		<div class="col-12 text-center">
+			<p>Пока нет ни одного рецепта. Будь первым!</p>
 			{% if user.is_authenticated %}
-			<a href="{% url 'create_recipe' %}" class="btn btn-dark">Создать рецепт</a>
+			<a href="{% url 'create_recipe' %}" class="btn btn-dark">Создать первый рецепт</a>
 			{% else %}
 			<a href="{% url 'login' %}" class="btn btn-dark">Войти и создать рецепт</a>
 			{% endif %}
 		</div>
 		{% endif %}
 	</div>
-	{% endblock %}
 </div>
+{% endblock content %}

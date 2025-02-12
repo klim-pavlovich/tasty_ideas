@@ -50,7 +50,7 @@
 					</div>
 				</div>
 				{% empty %}
-				<p>Not Found</p>
+				<p>Упс... Категории пропали, мы работаем над этим!</p>
 				{% endfor %}
 			</div>
 		</section>
@@ -60,14 +60,16 @@
 			>
 				{% if user.is_authenticated %}
 				<h1>Вдохновись и начинай готовить!</h1>
-				<p class="w-50">Ищи рецепты, сохраняй любимые и делись своими творениями! Создавай свой рецепт прямо сейчас!</p>
-				<a href="{% url 'create_recipe' %}" class="btn btn-dark text-light py-2">Создать рецепт</a>
+				<p class="w-50 mt-4">
+					Ищи рецепты, сохраняй любимые и делись своими творениями! Создавай свой рецепт прямо сейчас!
+				</p>
+				<a href="{% url 'create_recipe' %}" class="btn btn-dark text-light mt-4">Создать рецепт</a>
 				{% else %}
 				<h1>Вдохновись и начинай готовить!</h1>
-				<p class="w-50">
+				<p class="w-50 mt-4">
 					Ищи рецепты, сохраняй любимые и делись своими творениями! Присоединяйся сейчас и сделай готовку увлекательной!
 				</p>
-				<a href="{% url 'registration' %}" class="btn btn-dark text-light py-2">Создать аккаунт</a>
+				<a href="{% url 'registration' %}" class="btn btn-dark text-light mt-4">Создать аккаунт</a>
 				{% endif %}
 			</div>
 			<div>

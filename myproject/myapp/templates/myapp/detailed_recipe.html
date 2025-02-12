@@ -1,90 +1,95 @@
-{% extends "base.html" %} {% block title %}{{ recipe.title }}{% endblock title %} {% block content %} {% if recipe %}
+{% extends 'base.html' %} {% block content %}
 <div class="container py-5">
-	<div class="row g-5">
-		<!-- Левая колонка с изображением -->
-		<div class="col-md-6">
-			<div class="position-relative">
-				<img
-					src="{{ recipe.image_of_food.url }}"
-					class="img-fluid rounded-3 shadow"
-					alt="{{ recipe.title }}"
-					style="object-fit: cover; width: 100%; height: 500px"
-				/>
-				<div class="position-absolute top-0 end-0 p-3">
-					<button class="btn btn-light rounded-circle shadow-sm">
-						<i class="bi bi-heart"></i>
+	<div class="card">
+		{% if recipe.image_of_food %}
+		<img
+			src="{{ recipe.image_of_food.url }}"
+			class="img-fluid"
+			alt="{{ recipe.title }}"
+			style="max-height: 500px"
+		/>
+		{% endif %}
+			<div class="card-body">
+				<h1 class="card-title mb-4">{{ recipe.title }}</h1>
+				<p class="card-text">{{ recipe.description }}</p>
+
+				<div class="mb-3">
+					<h5>Категории:</h5>
+					{% for category in categories %}
+					<span class="badge bg-secondary">{{ category.category.name }}</span>
+					{% endfor %}
+				</div>
+
+				<div class="mb-3">
+					<h5>Время приготовления:</h5>
+					<p>{{ recipe.cooking_time }} минут</p>
+				</div>
+
+				<div class="mb-3">
+					<h5>Ингредиенты:</h5>
+					<ul>
+						{% for ingredient in recipe.ingredients %}
+						<li>{{ ingredient.name }} - {{ ingredient.amount }} {{ ingredient.unit }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+
+				<div class="mb-3">
+					<h5>Шаги приготовления:</h5>
+					<ol>
+						{% for step in recipe.cooking_steps %}
+						<li>{{ step }}</li>
+						{% endfor %}
+					</ol>
+				</div>
+
+				<!-- Добавляем модальное окно для подтверждения -->
+				<div
+					class="modal fade"
+					id="deleteConfirmModal"
+					tabindex="-1"
+					aria-labelledby="deleteConfirmModalLabel"
+					aria-hidden="true"
+				>
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="deleteConfirmModalLabel">Подтвердите действие на сайте 127.0.0.1</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body">Вы уверены, что хотите удалить этот рецепт?</div>
+							<div class="modal-footer">
+								<form
+									id="deleteForm"
+									action="{% url 'delete_recipe' recipe.id %}"
+									method="post"
+									style="display: inline"
+								>
+									{% csrf_token %}
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
+									<button type="submit" class="btn btn-primary">Да</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				{% if user == recipe.author %}
+				<div class="mt-4">
+					<a href="{% url 'edit_recipe' recipe.id %}" class="btn btn-outline-primary btn-sm">Редактировать</a>
+					<button
+						type="button"
+						class="btn btn-outline-danger btn-sm"
+						data-bs-toggle="modal"
+						data-bs-target="#deleteConfirmModal"
+					>
+						Удалить
 					</button>
 				</div>
-			</div>
-		</div>
-
-		<!-- Правая колонка с информацией -->
-		<div class="col-md-6">
-			<div class="d-flex flex-column h-100">
-				<!-- Заголовок и описание -->
-				<div class="mb-4">
-					<h1 class="display-4 mb-3">{{ recipe.title }}</h1>
-					<p class="lead text-muted">{{ recipe.description }}</p>
-				</div>
-
-				<!-- Основная информация -->
-				<div class="row mb-4">
-					<div class="col-auto">
-						<div class="d-flex align-items-center">
-							<i class="bi bi-clock me-2"></i>
-							<span>{{ recipe.cooking_time }} минут</span>
-						</div>
-					</div>
-					<div class="col-auto">
-						<div class="d-flex align-items-center">
-							<i class="bi bi-person me-2"></i>
-							<span>{{ recipe.author }}</span>
-						</div>
-					</div>
-					<div class="col-auto">
-						<div class="d-flex align-items-center">
-							<i class="bi bi-calendar me-2"></i>
-							<span>{{ recipe.date_of_create|date:"d.m.Y" }}</span>
-						</div>
-					</div>
-				</div>
-
-				<!-- Ингредиенты -->
-				<div class="mb-4">
-					<h3 class="h4 mb-3">
-						<i class="bi bi-list-ul me-2"></i>
-						Ингредиенты
-					</h3>
-					<div class="bg-light p-4 rounded-3">{{ recipe.ingredients|linebreaks }}</div>
-				</div>
-
-				<!-- Шаги приготовления -->
-				<div class="mb-4">
-					<h3 class="h4 mb-3">
-						<i class="bi bi-123 me-2"></i>
-						Шаги приготовления
-					</h3>
-					<div class="bg-light p-4 rounded-3">{{ recipe.cooking_steps|linebreaks }}</div>
-				</div>
-
-				<!-- Кнопки действий -->
-				<div class="mt-auto">
-					<div class="d-flex gap-2">
-						<button class="btn btn-outline-primary">
-							<i class="bi bi-heart me-2"></i>
-							Добавить в избранное
-						</button>
-					</div>
-				</div>
+				{% endif %}
 			</div>
 		</div>
 	</div>
 </div>
-{% else %}
-<div class="container py-5 text-center">
-	<div class="alert alert-warning" role="alert">
-		<i class="bi bi-exclamation-triangle me-2"></i>
-		Рецепт не найден
-	</div>
-</div>
-{% endif %} {% endblock content %}
+
+{% endblock %}

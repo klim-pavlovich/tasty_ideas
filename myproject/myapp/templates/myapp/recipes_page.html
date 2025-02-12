@@ -44,7 +44,7 @@
 		</div>
 	</div>
 
-	<!-- Нижний ряд карточек -->
+	<!-- Второй ряд карточек -->
 	<div class="row">
 		<!-- Все рецепты -->
 		<div class="col-md-6">
@@ -55,7 +55,7 @@
 					</div>
 					<h3 class="card-title mb-3">Все рецепты</h3>
 					<p class="card-text flex-grow-1">Исследуйте коллекцию рецептов нашего сообщества</p>
-					<a href="{% url 'index_recipes' %}" class="btn btn-dark btn-lg mt-3"> Смотреть все рецепты </a>
+					<a href="{% url 'all_recipes' %}" class="btn btn-dark btn-lg mt-3"> Смотреть все рецепты </a>
 				</div>
 			</div>
 		</div>
@@ -70,6 +70,41 @@
 					<h3 class="card-title mb-3">Категории</h3>
 					<p class="card-text flex-grow-1">Находите рецепты по категориям</p>
 					<a href="{% url 'categories' %}" class="btn btn-dark btn-lg mt-3"> Смотреть категории </a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Нижний ряд карточек -->
+	<div class="row">
+		<!-- Случайный рецепт -->
+		<div class="col-md-6">
+			<div class="card recipe-card h-100">
+				<div class="card-body text-center d-flex flex-column">
+					<div class="card-image-wrapper mb-4">
+						<img src="{% static 'images/random_recipe.jpg' %}" class="card-img-top rounded-3" alt="Случайный рецепт" />
+					</div>
+					<h3 class="card-title mb-3">Не знаешь что приготовить?</h3>
+					<p class="card-text flex-grow-1">Кликай кнопку ниже и мы придумаем за тебя!</p>
+					<a href="{% url 'random_recipe' %}" class="btn btn-dark btn-lg mt-3"> Смотреть случайный рецепт </a>
+				</div>
+			</div>
+		</div>
+
+		<!-- 5 случайных рецептов -->
+		<div class="col-md-6">
+			<div class="card recipe-card h-100">
+				<div class="card-body text-center d-flex flex-column">
+					<div class="card-image-wrapper mb-4">
+						<img
+							src="{% static 'images/random_recipe.jpg' %}"
+							class="card-img-top rounded-3"
+							alt="5 случайных рецептов"
+						/>
+					</div>
+					<h3 class="card-title mb-3">Хочешь посмотреть больше случайных рецептов?</h3>
+					<p class="card-text flex-grow-1">Кликай кнопку ниже и мы придумаем за тебя!</p>
+					<a href="{% url 'five_random_recipes' %}" class="btn btn-dark btn-lg mt-3"> Смотреть 5 случайных рецептов </a>
 				</div>
 			</div>
 		</div>
