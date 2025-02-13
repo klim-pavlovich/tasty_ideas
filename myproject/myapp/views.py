@@ -1,12 +1,14 @@
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpRequest
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import transaction
+from django.core.exceptions import ValidationError
+from django.db.models import Sum
 from .models import Recipe, Category, RecipeCategory, UnitChoices
 from .forms import RegistrationForm, RecipeForm, LoginForm, RegistrationForm
-from django.core.exceptions import ValidationError
+
 
 
 # Вход/выход/регистрация
@@ -260,7 +262,7 @@ def delete_recipe(request, recipe_id):
 # Страницы не требующие авторизации
 def index_recipes(request: HttpRequest):
     """Главная страница."""
-    categories = Category.objects.filter(name__in=["Супы", "Завтраки", "Сэндвичи", "Салаты"])
+    categories = Category.objects.order_by('-date_of_create')[:4]
     return render(request, 'myapp/index_recipes.html', {'categories': categories})
 
 
@@ -326,3 +328,40 @@ def all_recipes(request):
     """Страница со всеми рецептами."""
     recipes = Recipe.objects.all()
     return render(request, 'myapp/all_recipes.html', {'recipes': recipes})
+
+
+# Для профилирования
+def total_in_db(request):
+    """Страница с суммарным временем приготовления всех рецептов."""
+    total = Recipe.objects.aggregate(Sum('cooking_time'))['cooking_time__sum']
+    context = {
+        'title': 'Суммарное время посчитано в базе данных',
+        'total': total,
+    }
+
+    return render(request, 'myapp/total_count.html', context)  # Изменено на существующий шаблон
+
+
+def total_in_view(request):
+    """Страница с количеством времени приготовления всех рецептов через view."""
+    recipes = Recipe.objects.all()
+    total = sum(recipe.cooking_time for recipe in recipes)
+    context = {
+        'title': 'Суммарное время посчитано в представлении',
+        'total': total,
+    }
+    return render(request, 'myapp/total_count.html', context)
+
+
+def total_in_template(request):
+    """Страница с количеством времени приготовления всех рецептов через template."""
+    context = {
+        'title': 'Суммарное время посчитано в шаблоне',
+        'recipes': Recipe,
+    }
+    return render(request, 'myapp/total_count.html', context)
+
+
+def total_in_context(request):
+    """Страница с количеством времени приготовления всех рецептов через context."""
+

@@ -9,7 +9,8 @@ class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name="Название категории")
     description = models.TextField(max_length=250)
     photo = models.ImageField(upload_to='category_photos/', default='default_image.png')
-    
+    date_of_create = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+
     class Meta:
         verbose_name = "Категория"
         verbose_name_plural = "Категории"
@@ -30,7 +31,7 @@ class UnitChoices(str, Enum):
     @classmethod
     def choices(cls):
         return [(item.value, item.value) for item in cls]
-    
+
     @classmethod
     def values(cls):
         return [item.value for item in cls]
@@ -55,6 +56,10 @@ class Recipe(models.Model):
             if ingredient.get('unit') not in UnitChoices.values():
                 raise ValidationError(f"Недопустимая единица измерения: {ingredient.get('unit')}")
 
+    @property
+    def total_quantity_time(self):
+        """Подсчет общего количества времени приготовления всех рецептов через sum()."""
+        return sum(recipe.cooking_time for recipe in Recipe.objects.all())
 
 class RecipeCategory(models.Model):
     # Убрал связь M-to-M в Рецептах, так как в задании указано, что нужно написать модель.

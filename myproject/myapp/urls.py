@@ -25,6 +25,10 @@ urlpatterns = [
 
     path('five_random_recipes/', views.get_five_random_recipes, name='five_random_recipes'),
     path('random_recipe/', views.get_random_recipe, name='random_recipe'),
+    
+    path('db/', views.total_in_db, name='db'),
+    path('view/', views.total_in_view, name='view'),
+    path('template/', views.total_in_template, name='template'),
 ]
 
 
